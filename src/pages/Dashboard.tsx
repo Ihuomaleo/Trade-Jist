@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   TrendingUp,
@@ -8,20 +9,33 @@ import {
   DollarSign,
   BarChart3,
   Filter,
+  Info,
 } from 'lucide-react';
 import { useTrades, useTradeStats } from '@/hooks/useTrades';
 import { StatsCard } from '@/components/dashboard/StatsCard';
 import { EquityCurve } from '@/components/dashboard/EquityCurve';
 import { TradeTable } from '@/components/trades/TradeTable';
-import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
+import { DEMO_TRADES } from '@/data/demoTrades';
+import { useNavigate } from 'react-router-dom';
 
 export default function DashboardPage() {
-  const { trades, isLoading, deleteTrade } = useTrades();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const isDemo = location.search.includes('demo=true');
+  
+  const { trades: userTrades, isLoading, deleteTrade } = useTrades();
   const [excludeFOMO, setExcludeFOMO] = useState(false);
   const [excludeRuleBreak, setExcludeRuleBreak] = useState(false);
+
+  // Use demo trades if in demo mode, otherwise use user's trades
+  const trades = isDemo ? DEMO_TRADES : userTrades;
 
   const excludeEmotions = [
     ...(excludeFOMO ? ['FOMO'] : []),
@@ -29,11 +43,10 @@ export default function DashboardPage() {
   ];
 
   const stats = useTradeStats(trades, excludeEmotions);
-  const fullStats = useTradeStats(trades);
 
   const recentTrades = trades.slice(0, 5);
 
-  if (isLoading) {
+  if (isLoading && !isDemo) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-pulse text-muted-foreground">Loading trades...</div>
@@ -43,6 +56,19 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Demo Banner */}
+      {isDemo && (
+        <Alert className="border-primary/50 bg-primary/10">
+          <Info className="h-4 w-4" />
+          <AlertDescription className="flex items-center justify-between">
+            <span>You're viewing demo data. Sign up to start tracking your own trades!</span>
+            <Button size="sm" onClick={() => navigate('/auth')}>
+              Get Started
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -52,7 +78,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-2xl font-semibold">Dashboard</h1>
           <p className="text-muted-foreground">
-            Overview of your trading performance
+            {isDemo ? 'Demo trading performance data' : 'Overview of your trading performance'}
           </p>
         </div>
       </motion.div>
@@ -177,7 +203,7 @@ export default function DashboardPage() {
         <CardContent>
           <TradeTable
             trades={recentTrades}
-            onDelete={deleteTrade}
+            onDelete={isDemo ? undefined : deleteTrade}
           />
         </CardContent>
       </Card>

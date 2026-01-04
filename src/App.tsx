@@ -32,7 +32,7 @@ const App = () => (
             {/* Protected routes with layout */}
             <Route
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowDemo>
                   <AppLayout />
                 </ProtectedRoute>
               }

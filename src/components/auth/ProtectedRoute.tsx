@@ -1,9 +1,17 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowDemo?: boolean;
+}
+
+export function ProtectedRoute({ children, allowDemo = false }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const location = useLocation();
+
+  // Check if we're in demo mode
+  const isDemo = location.search.includes('demo=true');
 
   if (loading) {
     return (
@@ -13,7 +21,8 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user) {
+  // Allow access if user is authenticated OR if demo mode is enabled and allowed
+  if (!user && !(allowDemo && isDemo)) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
