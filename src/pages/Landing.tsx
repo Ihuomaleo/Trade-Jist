@@ -73,7 +73,7 @@ export default function LandingPage() {
                 Get Started Free
                 <ArrowRight className="w-4 h-4" />
               </Button>
-              <Button size="lg" variant="outline" onClick={() => navigate('/dashboard')}>
+              <Button size="lg" variant="outline" onClick={() => navigate('/dashboard?demo=true')}>
                 View Demo
               </Button>
             </div>
