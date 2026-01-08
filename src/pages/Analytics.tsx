@@ -113,14 +113,14 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-2xl font-semibold">Strategy Analytics</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-xl md:text-2xl font-semibold">Strategy Analytics</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Deep dive into your trading performance
         </p>
       </motion.div>
@@ -129,7 +129,7 @@ export default function AnalyticsPage() {
       <EquityCurve trades={trades} />
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Session Performance */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -137,37 +137,41 @@ export default function AnalyticsPage() {
           transition={{ delay: 0.3 }}
         >
           <Card className="border-border/50 bg-card/80">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium">Session Performance</CardTitle>
+            <CardHeader className="pb-2 md:pb-4">
+              <CardTitle className="text-base md:text-lg font-medium">Session Performance</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-2 md:px-6">
               {sessionData.length === 0 ? (
-                <div className="h-[250px] flex items-center justify-center text-muted-foreground">
+                <div className="h-[200px] md:h-[250px] flex items-center justify-center text-muted-foreground text-sm">
                   No session data available
                 </div>
               ) : (
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart data={sessionData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height={200} className="md:!h-[250px]">
+                  <BarChart data={sessionData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(217, 32%, 18%)" />
                     <XAxis
                       dataKey="session"
                       stroke="hsl(215, 20%, 55%)"
-                      fontSize={12}
+                      fontSize={10}
                       tickLine={false}
                       axisLine={false}
+                      interval={0}
+                      tick={{ fontSize: 10 }}
                     />
                     <YAxis
                       stroke="hsl(215, 20%, 55%)"
-                      fontSize={12}
+                      fontSize={10}
                       tickLine={false}
                       axisLine={false}
                       tickFormatter={(value) => `$${value}`}
+                      width={45}
                     />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: 'hsl(222, 47%, 8%)',
                         border: '1px solid hsl(217, 32%, 18%)',
                         borderRadius: '8px',
+                        fontSize: '12px',
                       }}
                       formatter={(value: number, name: string) => {
                         if (name === 'pnl') return [`$${value.toFixed(2)}`, 'P/L'];
@@ -196,17 +200,17 @@ export default function AnalyticsPage() {
           transition={{ delay: 0.4 }}
         >
           <Card className="border-border/50 bg-card/80">
-            <CardHeader>
-              <CardTitle className="text-lg font-medium">Pair Distribution</CardTitle>
+            <CardHeader className="pb-2 md:pb-4">
+              <CardTitle className="text-base md:text-lg font-medium">Pair Distribution</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-2 md:px-6">
               {pairDistribution.length === 0 ? (
-                <div className="h-[250px] flex items-center justify-center text-muted-foreground">
+                <div className="h-[200px] md:h-[250px] flex items-center justify-center text-muted-foreground text-sm">
                   No pair data available
                 </div>
               ) : (
-                <div className="flex items-center justify-between">
-                  <ResponsiveContainer width="50%" height={250}>
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <ResponsiveContainer width="100%" height={180} className="sm:!w-1/2 sm:!h-[220px]">
                     <PieChart>
                       <Pie
                         data={pairDistribution}
@@ -214,8 +218,8 @@ export default function AnalyticsPage() {
                         nameKey="pair"
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={90}
+                        innerRadius={35}
+                        outerRadius={70}
                         paddingAngle={2}
                       >
                         {pairDistribution.map((entry, index) => (
@@ -227,18 +231,19 @@ export default function AnalyticsPage() {
                           backgroundColor: 'hsl(222, 47%, 8%)',
                           border: '1px solid hsl(217, 32%, 18%)',
                           borderRadius: '8px',
+                          fontSize: '12px',
                         }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
-                  <div className="flex-1 space-y-2">
+                  <div className="w-full sm:flex-1 grid grid-cols-2 sm:grid-cols-1 gap-1.5 sm:space-y-1.5">
                     {pairDistribution.map((item, index) => (
-                      <div key={item.pair} className="flex items-center gap-2 text-sm">
+                      <div key={item.pair} className="flex items-center gap-2 text-xs sm:text-sm">
                         <div
-                          className="w-3 h-3 rounded-full"
+                          className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0"
                           style={{ backgroundColor: COLORS[index % COLORS.length] }}
                         />
-                        <span className="font-mono">{item.pair}</span>
+                        <span className="font-mono truncate">{item.pair}</span>
                         <span className="text-muted-foreground ml-auto">{item.count}</span>
                       </div>
                     ))}
@@ -257,28 +262,28 @@ export default function AnalyticsPage() {
         transition={{ delay: 0.5 }}
       >
         <Card className="border-border/50 bg-card/80">
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Setup Performance</CardTitle>
+          <CardHeader className="pb-2 md:pb-4">
+            <CardTitle className="text-base md:text-lg font-medium">Setup Performance</CardTitle>
           </CardHeader>
           <CardContent>
             {setupData.length === 0 ? (
-              <div className="h-[200px] flex items-center justify-center text-muted-foreground">
+              <div className="h-[150px] md:h-[200px] flex items-center justify-center text-muted-foreground text-sm text-center px-4">
                 No setup data available. Tag your trades with setups to see performance.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 {setupData.map(setup => (
                   <div
                     key={setup.setup}
-                    className="p-4 rounded-lg bg-muted/30 border border-border/50"
+                    className="p-3 md:p-4 rounded-lg bg-muted/30 border border-border/50"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">{setup.setup}</span>
-                      <span className={`font-mono text-sm ${setup.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                    <div className="flex items-center justify-between mb-1.5 md:mb-2">
+                      <span className="font-medium text-sm md:text-base truncate mr-2">{setup.setup}</span>
+                      <span className={`font-mono text-xs md:text-sm flex-shrink-0 ${setup.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                         {setup.pnl >= 0 ? '+' : ''}${setup.pnl}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-3 md:gap-4 text-xs md:text-sm text-muted-foreground">
                       <span>Win Rate: <strong className="text-foreground">{setup.winRate}%</strong></span>
                       <span>Trades: <strong className="text-foreground">{setup.totalTrades}</strong></span>
                     </div>
@@ -297,46 +302,46 @@ export default function AnalyticsPage() {
         transition={{ delay: 0.6 }}
       >
         <Card className="border-border/50 bg-card/80">
-          <CardHeader>
-            <CardTitle className="text-lg font-medium">Performance Summary</CardTitle>
+          <CardHeader className="pb-2 md:pb-4">
+            <CardTitle className="text-base md:text-lg font-medium">Performance Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Expectancy Formula</p>
-                <p className="text-xs text-muted-foreground font-mono">
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Expectancy</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground font-mono hidden sm:block">
                   (Win% × Avg Win) - (Loss% × Avg Loss)
                 </p>
-                <p className={`text-xl font-mono font-semibold mt-2 ${stats.expectancy >= 0 ? 'text-profit' : 'text-loss'}`}>
+                <p className={`text-lg md:text-xl font-mono font-semibold mt-1 md:mt-2 ${stats.expectancy >= 0 ? 'text-profit' : 'text-loss'}`}>
                   ${stats.expectancy.toFixed(2)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Risk/Reward</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Risk/Reward</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">
                   Average Win vs Average Loss
                 </p>
-                <p className="text-xl font-mono font-semibold mt-2">
+                <p className="text-lg md:text-xl font-mono font-semibold mt-1 md:mt-2">
                   {stats.avgLoss > 0 ? (stats.avgWin / stats.avgLoss).toFixed(2) : '—'}:1
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Break-Even Win Rate</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Break-Even WR</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">
                   Required win rate to break even
                 </p>
-                <p className="text-xl font-mono font-semibold mt-2">
+                <p className="text-lg md:text-xl font-mono font-semibold mt-1 md:mt-2">
                   {stats.avgWin + stats.avgLoss > 0
                     ? Math.round((stats.avgLoss / (stats.avgWin + stats.avgLoss)) * 100)
                     : '—'}%
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Edge</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground mb-0.5 md:mb-1">Edge</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">
                   Win Rate vs Break-Even
                 </p>
-                <p className={`text-xl font-mono font-semibold mt-2 ${
+                <p className={`text-lg md:text-xl font-mono font-semibold mt-1 md:mt-2 ${
                   stats.winRate > (stats.avgLoss / (stats.avgWin + stats.avgLoss)) * 100 ? 'text-profit' : 'text-loss'
                 }`}>
                   {stats.avgWin + stats.avgLoss > 0
