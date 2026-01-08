@@ -75,6 +75,7 @@ export function TradeForm({ open, onOpenChange, onSubmit, isSubmitting, defaultV
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>(defaultValues?.emotions || []);
   const [beforeScreenshot, setBeforeScreenshot] = useState<string | null>(defaultValues?.before_screenshot || null);
   const [afterScreenshot, setAfterScreenshot] = useState<string | null>(defaultValues?.after_screenshot || null);
+  const [customPair, setCustomPair] = useState<string>('');
 
   const form = useForm<TradeFormData>({
     resolver: zodResolver(tradeSchema),
@@ -166,7 +167,16 @@ export function TradeForm({ open, onOpenChange, onSubmit, isSubmitting, defaultV
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Currency Pair</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select 
+                      onValueChange={(value) => {
+                        if (value === 'custom') {
+                          setCustomPair('');
+                        } else {
+                          field.onChange(value);
+                        }
+                      }} 
+                      value={CURRENCY_PAIRS.includes(field.value as typeof CURRENCY_PAIRS[number]) ? field.value : (field.value ? 'custom' : '')}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select pair" />
@@ -176,8 +186,21 @@ export function TradeForm({ open, onOpenChange, onSubmit, isSubmitting, defaultV
                         {CURRENCY_PAIRS.map(pair => (
                           <SelectItem key={pair} value={pair}>{pair}</SelectItem>
                         ))}
+                        <SelectItem value="custom">+ Add Custom</SelectItem>
                       </SelectContent>
                     </Select>
+                    {(form.watch('pair') === 'custom' || (!CURRENCY_PAIRS.includes(field.value as typeof CURRENCY_PAIRS[number]) && field.value)) && (
+                      <Input
+                        placeholder="e.g. BTC/USD"
+                        className="mt-2 font-mono"
+                        value={CURRENCY_PAIRS.includes(field.value as typeof CURRENCY_PAIRS[number]) ? customPair : (field.value || customPair)}
+                        onChange={(e) => {
+                          const value = e.target.value.toUpperCase();
+                          setCustomPair(value);
+                          field.onChange(value);
+                        }}
+                      />
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
