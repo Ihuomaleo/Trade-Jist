@@ -49,7 +49,7 @@ export function AppSidebar() {
               exit={{ opacity: 0 }}
               className="font-semibold text-foreground"
             >
-              TradeJournal
+              Trade Journal
             </motion.span>
           )}
         </div>
