@@ -195,10 +195,10 @@ export default function LandingPage() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-profit flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 text-white" />
               </div>
-              <span className="font-semibold">TradeJournal</span>
+              <span className="font-semibold">Trade Journal</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 TradeJournal. Built for serious traders.
+              © 2026 Trade Journal. Built for serious traders.
             </p>
           </div>
         </div>
