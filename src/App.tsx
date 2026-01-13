@@ -14,6 +14,8 @@ import TradesPage from "./pages/Trades";
 import AnalyticsPage from "./pages/Analytics";
 import CalendarPage from "./pages/Calendar";
 import SettingsPage from "./pages/Settings";
+import PrivacyPage from "./pages/Privacy";
+import TermsPage from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
               {/* Public routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/terms" element={<TermsPage />} />
 
               {/* Protected routes with layout */}
               <Route
