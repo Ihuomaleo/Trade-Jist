@@ -26,5 +26,13 @@ export function ProtectedRoute({ children, allowDemo = false }: ProtectedRoutePr
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
+  // Check if user needs onboarding (only for authenticated users, not demo)
+  if (user && !isDemo && !user.user_metadata?.onboarding_completed) {
+    // Don't redirect if already on onboarding page
+    if (location.pathname !== '/onboarding') {
+      return <Navigate to="/onboarding" replace />;
+    }
+  }
+
   return <>{children}</>;
 }

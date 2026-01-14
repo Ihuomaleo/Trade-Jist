@@ -16,6 +16,7 @@ import AnalyticsPage from "./pages/Analytics";
 import CalendarPage from "./pages/Calendar";
 import SettingsPage from "./pages/Settings";
 import ProfilePage from "./pages/Profile";
+import OnboardingPage from "./pages/Onboarding";
 import PrivacyPage from "./pages/Privacy";
 import TermsPage from "./pages/Terms";
 import NotFound from "./pages/NotFound";
@@ -35,6 +36,7 @@ const App = () => (
               {/* Public routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
+              <Route path="/onboarding" element={<OnboardingPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
 
