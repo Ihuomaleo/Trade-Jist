@@ -1,7 +1,7 @@
-## Trade-Jist 📈
+# Trade-Jist 📈
 Trade-Jist is a professional-grade forex trading journal designed to help serious traders track their performance, analyze their edge, and eliminate psychological mistakes through data-driven insights.
 
-## ✨ Features
+# ✨ Features
 Comprehensive Trade Logging: Record entry/exit data, setup types, and psychological tags for every trade.
 
 Performance Analytics: Visualize your equity curve, win rates, and R-multiple expectancy.
@@ -12,16 +12,17 @@ Interactive Calendar: Track your trading consistency and daily performance via a
 
 Secure & Private: Built with Supabase to ensure your trading data is encrypted and accessible only by you.
 
-## 🚀 Tech Stack
-# Frontend: React 18 with TypeScript.
-# Styling: Tailwind CSS & shadcn/ui.
-# Animations: Framer Motion.
-# Database/Auth: Supabase.
-# Charts: Recharts.
-# Build Tool: Vite.
+# 🚀 Tech Stack
+## Frontend: React 18 with TypeScript.
+## Styling: Tailwind CSS & shadcn/ui.
+## Animations: Framer Motion.
+## Database/Auth: Supabase.
+## Charts: Recharts.
+## Build Tool: Vite.
 
-## 🛠️ Getting Started
+# 🛠️ Getting Started
 Prerequisites
 Node.js (v18 or higher)
 
 npm or bun
+
