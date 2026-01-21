@@ -1,6 +1,8 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { EmailTemplate } from '@/components/Template/EmailTemplate';
+import { Resend } from 'resend';
 
 interface AuthContextType {
   user: User | null;
@@ -19,7 +21,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -51,24 +54,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         data: { display_name: displayName },
       },
     });
+    if (!error) {
+      const { data, error } = await resend.emails.send({
+        from: 'Trade jist<onboarding@resend.dev>',
+        to: [`${email}`],
+        subject: 'Confirm Email ${email} - Trade jist',
+        react: EmailTemplate({ firstName: 'John' }),
+      });
+
+      // if (error) {
+      //   return res.status(400).json(error);
+      // }
+
+      // res.status(200).json(data);
+      //   }
+      //   return { error: error as Error | null };
+      // };
+    }
     return { error: error as Error | null };
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
-    return { error: error as Error | null };
   };
 
   const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth?reset=true`,
-    });
-    return { error: error as Error | null };
   };
 
   const signOut = async () => {
